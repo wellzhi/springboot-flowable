@@ -1,0 +1,147 @@
+server:
+  port: 8050
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    context-path: /
+spring:
+  datasource:
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/workflow?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
+
+flowable:
+  check-process-definitions: true #是否需要自动部署流程定义。
+  cmmn:
+    async:
+      executor:
+        async-job-lock-time-in-millis: 300000 #异步作业在被异步执行器取走后的锁定时间（以毫秒计）。在这段时间内，其它异步执行器不会尝试获取及锁定这个任务。'
+        default-async-job-acquire-wait-time-in-millis: 10000 #异步作业获取线程在进行下次获取查询前的等待时间（以毫秒计）。只在当次没有取到新的异步作业，或者只取到很少的异步作业时生效。默认值= 10秒。'
+        default-queue-size-full-wait-time-in-millis: 0 #异步作业（包括定时器作业与异步执行）获取线程在队列满时，等待执行下次查询的等待时间（以毫秒计）。默认值为0（以向后兼容）'
+        default-timer-job-acquire-wait-time-in-millis: 1000 #定时器作业获取线程在进行下次获取查询前的等待时间（以毫秒计）。只在当次没有取到新的定时器作业，或者只取到很少的定时器作业时生效。默认值= 10秒。'
+        max-async-jobs-due-per-acquisition: 1 # （译者补）单次查询的异步作业数量。默认值为1，以降低乐观锁异常的可能性。除非你知道自己在做什么，否则请不要修改这个值。'
+        retry-wait-time-in-millis: 500 #（译者补不了了）'
+        timer-lock-time-in-millis: 300000 #定时器作业在被异步执行器取走后的锁定时间（以毫秒计）。在这段时间内，其它异步执行器不会尝试获取及锁定这个任务。'
+    async-executor-activate: true # 是否启用异步执行器。'
+    deploy-resources: true #是否部署资源。默认值为''true''。'
+    deployment-name: SpringBootAutoDeployment #CMMN资源部署的名字。'
+    enable-safe-xml: true # 在解析CMMN XML文件时进行额外检查。参见 https://www.flowable.org/docs/userguide/index.html#advanced.safe.bpmn.xml # 不幸的是，部分平台（JDK 6，JBoss）上无法使用这个功能，因此如果你所用的平台在XML解析时不支持StaxSource，需要禁用这个功能。'
+    enabled: false # 是否启用CMMN引擎。'
+    resource-location: classpath*:/cases/ # CMMN资源的路径。'
+    resource-suffixes: # **.cmmn,**.cmmn11,**.cmmn.xml,**.cmmn11.xml # 需要扫描的资源后缀名。'
+    servlet:
+      load-on-startup: -1 # 启动时加载CMMN servlet。'
+      name: Flowable CMMN Rest API # CMMN servlet的名字。'
+      path: /cmmn-api # CMMN servlet的context path。'
+  content:
+    enabled: false # 是否启动Content引擎。'
+    servlet:
+      load-on-startup: -1 # 启动时加载Content servlet。'
+      name: Flowable Content Rest API # Content servlet的名字。'
+      path: /content-api # Content servlet的context path。'
+    storage:
+      create-root: true # 如果根路径不存在，是否需要创建？'
+      root-folder: # 存储content文件（如上传的任务附件，或表单文件）的根路径。'
+  custom-mybatis-mappers: # 需要添加至引擎的自定义Mybatis映射的FQN。'
+  custom-mybatis-x-m-l-mappers: # 需要添加至引擎的自定义Mybatis XML映射的路径。'
+  database-schema: # 如果数据库返回的元数据不正确，可以在这里设置schema用于检测/生成表。'
+  database-schema-update: true # 数据库schema更新策略。'
+  db-history-used: true # 是否要使用db历史。'
+  deployment-name: SpringBootAutoDeployment # 自动部署的名称。'
+  dmn:
+    deploy-resources: true # 是否部署资源。默认为''true''。'
+    deployment-name: SpringBootAutoDeployment # DMN资源部署的名字。'
+    enable-safe-xml: true # 在解析DMN XML文件时进行额外检查。参见 https://www.flowable.org/docs/userguide/index.html#advanced.safe.bpmn.xml。不幸的是，部分平台（JDK 6，JBoss）上无法使用这个功能，因此如果你所用的平台在XML解析时不支持StaxSource，需要禁用这个功能。'
+    enabled: false # 是否启用DMN引擎。'
+    history-enabled: false # 是否启用DMN引擎的历史。'
+    resource-location: classpath*:/dmn/ # DMN资源的路径。'
+    resource-suffixes: # **.dmn,**.dmn.xml,**.dmn11,**.dmn11.xml # 需要扫描的资源后缀名。'
+    servlet:
+      load-on-startup: -1 # 启动时加载DMN servlet。'
+      name: Flowable DMN Rest API # DMN servlet的名字。'
+      path: /dmn-api # DMN servlet的context path。'
+    strict-mode: true # 如果希望避免抉择表命中策略检查导致失败，可以将本参数设置为false。如果检查发现了错误，会直接返回错误前一刻的中间结果。'
+  form:
+    deploy-resources: true # 是否部署资源。默认为''true''。'
+    deployment-name: SpringBootAutoDeployment # Form资源部署的名字。'
+    enabled: false # 是否启用Form引擎。'
+    resource-location: classpath*:/forms/ # Form资源的路径。'
+    resource-suffixes: # **.form # 需要扫描的资源后缀名。'
+    servlet:
+      load-on-startup: -1 # 启动时加载Form servlet。'
+      name: Flowable Form Rest API # Form servlet的名字。'
+      path: /form-api # Form servlet的context path。'
+  history-level: audit # 要使用的历史级别。'
+  idm:
+    enabled: false # 是否启用IDM引擎。'
+    ldap:
+      attribute:
+        email: # 用户email的属性名。'
+        first-name: # 用户名字的属性名。'
+        group-id: # 用户组ID的属性名。'
+        group-name: # 用户组名的属性名。'
+        group-type: # 用户组类型的属性名。'
+        last-name: # 用户姓的属性名。'
+        user-id: # 用户ID的属性名。'
+      base-dn: # 查找用户与组的DN（标志名称 distinguished name）。'
+      cache:
+        group-size: -1 # 设置{@link org.flowable.ldap.LDAPGroupCache}的大小。这是LRU缓存，用于缓存用户及组，以避免每次都查询LDAP系统。'
+      custom-connection-parameters: '# 用于设置所有没有专用setter的LDAP连接参数。查看 http://docs.oracle.com/javase/tutorial/jndi/ldap/jndi.html
+                介绍的自定义参数。参数包括配置链接池，安全设置，等等。'
+      enabled: false # 是否启用LDAP IDM 服务。'
+      group-base-dn: # 组查找的DN。'
+      initial-context-factory: com.sun.jndi.ldap.LdapCtxFactory # 初始化上下文工厂的类名。'
+      password: # 连接LDAP系统的密码。'
+      port: -1 # LDAP系统的端口。'
+      query:
+        all-groups: # 查询所有组所用的语句。'
+        all-users: # 查询所有用户所用的语句。'
+        groups-for-user: # 按照指定用户查询所属组所用的语句'
+        user-by-full-name-like: # 按照给定全名查找用户所用的语句。'
+        user-by-id: # 按照userId查找用户所用的语句。'
+      search-time-limit: 0 # 查询LDAP的超时时间（以毫秒计）。默认值为''0''，即“一直等待”。'
+      security-authentication: simple # 连接LDAP系统所用的''java.naming.security.authentication''参数的值。'
+      server: # LDAP系统的主机名。如''ldap://localhost''。'
+      user: # 连接LDAP系统的用户ID。'
+      user-base-dn: # 查找用户的DN。'
+    password-encoder: # 使用的密码编码类型。'
+    servlet:
+      load-on-startup: -1 # 启动时加载IDM servlet。'
+      name: Flowable IDM Rest API # IDM servlet的名字。'
+      path: /idm-api # IDM servlet的context path。'
+  mail:
+    server:
+      default-from: flowable@localhost # 发送邮件时使用的默认发信人地址。'
+      host: localhost # 邮件服务器。'
+      password: # 邮件服务器的登录密码。'
+      port: 1025 # 邮件服务器的端口号。'
+      use-ssl: false # 是否使用SSL/TLS加密SMTP传输连接（即SMTPS/POPS)。'
+      use-tls: false # 使用或禁用STARTTLS加密。'
+      username: # 邮件服务器的登录用户名。如果为空，则不需要登录。'
+  process:
+    async:
+      executor:
+        async-job-lock-time-in-millis: 300000 # 异步作业在被异步执行器取走后的锁定时间（以毫秒计）。在这段时间内，其它异步执行器不会尝试获取及锁定这个任务。'
+        default-async-job-acquire-wait-time-in-millis: 10000 # 异步作业获取线程在进行下次获取查询前的等待时间（以毫秒计）。只在当次没有取到新的异步作业，或者只取到很少的异步作业时生效。默认值= 10秒。'
+        default-queue-size-full-wait-time-in-millis: 0 # 异步作业（包括定时器作业与异步执行）获取线程在队列满时，等待执行下次查询的等待时间（以毫秒计）。默认值为0（以向后兼容）'
+        default-timer-job-acquire-wait-time-in-millis: 10000 # 定时器作业获取线程在进行下次获取查询前的等待时间（以毫秒计）。只在当次没有取到新的定时器作业，或者只取到很少的定时器作业时生效。默认值= 10秒。'
+        max-async-jobs-due-per-acquisition: 1 # （译者补）单次查询的异步作业数量。默认值为1，以降低乐观锁异常的可能性。除非你知道自己在做什么，否则请不要修改这个值。'
+        retry-wait-time-in-millis: 500 # ???（译者补不了了）'
+        timer-lock-time-in-millis: 300000 # 定时器作业在被异步执行器取走后的锁定时间（以毫秒计）。在这段时间内，其它异步执行器不会尝试获取及锁定这个任务。'
+    async-executor-activate: true # 是否启用异步执行器。'
+    definition-cache-limit: -1 # 流程定义缓存中保存流程定义的最大数量。默认值为-1（缓存所有流程定义）。'
+    enable-safe-xml: true # 在解析BPMN XML文件时进行额外检查。参见 https://www.flowable.org/docs/userguide/index.html#advanced.safe.bpmn.xml。不幸的是，部分平台（JDK 6，JBoss）上无法使用这个功能，因此如果你所用的平台在XML解析时不支持StaxSource，需要禁用这个功能。'
+    servlet:
+      load-on-startup: -1 # 启动时加载Process servlet。'
+      name: Flowable BPMN Rest API # Process servlet的名字。'
+      path: /process-api # Process servelet的context path。'
+  process-definition-location-prefix: classpath*:/processes/ # 自动部署时查找流程的目录。'
+  process-definition-location-suffixes: # **.bpmn20.xml,**.bpmn # ''processDefinitionLocationPrefix''路径下需要部署的文件的后缀（扩展名）。'
+  db-identity-used: false
+management:
+  endpoint:
+    flowable:
+      cache:
+        time-to-live: 0ms # 缓存响应的最大时间。'
+      enabled: true # 是否启用flowable端点。'
