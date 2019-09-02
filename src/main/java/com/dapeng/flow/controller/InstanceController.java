@@ -2,14 +2,16 @@ package com.dapeng.flow.controller;
 
 
 import com.dapeng.flow.common.result.ResponseData;
-import com.dapeng.flow.flowable.handler.HistTaskQueryHandler;
+import com.dapeng.flow.common.utils.BeanUtil;
 import com.dapeng.flow.flowable.handler.InstanceHandler;
+import com.dapeng.flow.flowable.handler.TaskQueryHandler;
+import com.dapeng.flow.repository.model.TaskVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.flowable.engine.runtime.ProcessInstance;
-import org.flowable.task.api.history.HistoricTaskInstance;
+import org.flowable.task.api.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +36,7 @@ public class InstanceController {
     @Autowired
     private InstanceHandler instanceHandler;
     @Autowired
-    private HistTaskQueryHandler histTaskQueryHandler;
+    private TaskQueryHandler taskQueryHandler;
 
 
     /**
@@ -42,12 +44,16 @@ public class InstanceController {
      */
     @RequestMapping(value = "/startByKey", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "启动流程实例__通过流程定义name", notes = "实例启动成功，返回当前活动任务", produces = "application/json")
-    @ApiImplicitParams({@ApiImplicitParam(name = "name", value = "流程定义name", required = true, dataType = "String")})
-    public ResponseData<HistoricTaskInstance> startByName(String name, @RequestBody Map<String, Object> variables) {
-        ProcessInstance pi = instanceHandler.startProcessInstanceByKey(name, variables);
-        HistoricTaskInstance historicTaskInstance = histTaskQueryHandler.activeTask(pi.getProcessInstanceId());
-        return ResponseData.success(historicTaskInstance);
+    @ApiOperation(value = "启动流程实例__通过流程定义name", notes = "实例启动成功，返回当前活动任务，如果部署流程模板时指定了tenantId，那么调用此方法也要指定", produces = "application/json")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name", value = "流程定义name", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "tenantId", value = "系统标识", required = false, dataType = "String"),
+    })
+    public ResponseData<TaskVO> startByName(String name, String tenantId, @RequestBody Map<String, Object> variables) {
+        ProcessInstance pi = instanceHandler.startProcessInstanceByKeyAndTenantId(name, tenantId, variables);
+        Task task = taskQueryHandler.processInstanceId(pi.getProcessInstanceId());
+        TaskVO taskVO = BeanUtil.copyBean(task, TaskVO.class);
+        return ResponseData.success(taskVO);
     }
 
     /**
@@ -57,10 +63,11 @@ public class InstanceController {
     @ResponseBody
     @ApiOperation(value = "启动流程实例--通过流程定义ID", notes = "实例启动成功，返回当前活动任务", produces = "application/json")
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "流程定义ID", required = true, dataType = "String")})
-    public ResponseData<HistoricTaskInstance> startById(String id, @RequestBody Map<String, Object> variables) {
+    public ResponseData<TaskVO> startById(String id, @RequestBody Map<String, Object> variables) {
         ProcessInstance pi = instanceHandler.startProcessInstanceById(id, variables);
-        HistoricTaskInstance historicTaskInstance = histTaskQueryHandler.activeTask(pi.getProcessInstanceId());
-        return ResponseData.success(historicTaskInstance);
+        Task task = taskQueryHandler.processInstanceId(pi.getProcessInstanceId());
+        TaskVO taskVO = BeanUtil.copyBean(task, TaskVO.class);
+        return ResponseData.success(taskVO);
     }
 
     /**
@@ -71,10 +78,11 @@ public class InstanceController {
     @ApiOperation(value = "启动流程实例并执行第一个流程任务", notes = "返回已执行、活动的任务map", produces = "application/json")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "name", value = "流程定义KEY（模板ID）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "tenantId", value = "系统标识", required = false, dataType = "String"),
             @ApiImplicitParam(name = "userId", value = "流程启动者ID", required = true, dataType = "String"),
     })
-    public ResponseData startAndExecute(String name, String userId, @RequestBody Map<String, Object> variables) throws Exception {
-        Map<String, Object> map = instanceHandler.startInstanceAndExecuteFirstTask(name, userId, variables);
+    public ResponseData startAndExecute(String name, String tenantId, String userId, @RequestBody Map<String, Object> variables) throws Exception {
+        Map<String, Object> map = instanceHandler.startInstanceAndExecuteFirstTask(name, tenantId, userId, variables);
         return ResponseData.success(map);
     }
 
@@ -86,10 +94,12 @@ public class InstanceController {
     @ApiOperation(value = "启动流程实例并执行第一个流程任务,并设置下一任务处理人", notes = "{\"days\":\"6\",\"actorIds\":[\"zhangsan\",\"lisi\"]}", produces = "application/json")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "name", value = "流程定义KEY（模板ID）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "tenantId", value = "系统标识", required = false, dataType = "String"),
             @ApiImplicitParam(name = "userId", value = "流程启动者ID", required = true, dataType = "String"),
     })
-    public ResponseData startAndExecuteAndSetActor(String name, String userId, @RequestBody Map<String, Object> variables) throws Exception {
-        Map<String, Object> map = instanceHandler.startInstanceAndExecuteFirstTask(name, userId, variables);
+    public ResponseData startAndExecuteAndSetActor(String name, String tenantId, String userId,
+                                                   @RequestBody Map<String, Object> variables) {
+        Map<String, Object> map = instanceHandler.startInstanceAndExecuteFirstTask(name, tenantId, userId, variables);
         return ResponseData.success(map);
     }
 

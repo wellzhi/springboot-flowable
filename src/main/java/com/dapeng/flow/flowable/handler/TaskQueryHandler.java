@@ -1,9 +1,11 @@
 package com.dapeng.flow.flowable.handler;
 
 
+import com.dapeng.flow.common.utils.BeanUtil;
 import com.dapeng.flow.flowable.ActTaskQuery;
 import com.dapeng.flow.flowable.ServiceFactory;
 import com.dapeng.flow.flowable.common.VariablesEnum;
+import com.dapeng.flow.repository.model.TaskVO;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.task.api.Task;
 import org.flowable.task.api.TaskQuery;
@@ -41,13 +43,19 @@ public class TaskQueryHandler extends ServiceFactory implements ActTaskQuery {
     }
 
     @Override
-    public Task taskId(String taskId){
-
+    public Task taskId(String taskId) {
         return createTaskQuery().taskId(taskId).singleResult();
     }
 
     @Override
-    public List<Task> taskCandidateUser(String candidateUser,int start,int limit) {
+    public TaskVO queryTaskVOById(String taskId) {
+
+        Task task = createTaskQuery().taskId(taskId).singleResult();
+        return BeanUtil.copyBean(task, TaskVO.class);
+    }
+
+    @Override
+    public List<Task> taskCandidateUser(String candidateUser, int start, int limit) {
 
         return createTaskQuery().taskCandidateUser(candidateUser)
                 .orderByTaskPriority().desc()
@@ -56,7 +64,7 @@ public class TaskQueryHandler extends ServiceFactory implements ActTaskQuery {
     }
 
     @Override
-    public List<Task> taskAssignee(String assignee,int start,int limit) {
+    public List<Task> taskAssignee(String assignee, int start, int limit) {
 
         return createTaskQuery().taskAssignee(assignee).orderByTaskPriority().desc()
                 .orderByTaskCreateTime().asc()
@@ -64,11 +72,11 @@ public class TaskQueryHandler extends ServiceFactory implements ActTaskQuery {
     }
 
     @Override
-    public List<Task> taskCandidateOrAssigned(String userId,int start,int limit) {
-
-        return createTaskQuery().taskCandidateOrAssigned(userId).orderByTaskPriority().desc()
+    public List<Task> taskCandidateOrAssigned(String userId) {
+        return createTaskQuery().taskCandidateOrAssigned(userId)
+                .orderByTaskPriority().desc()
                 .orderByTaskCreateTime().asc()
-                .listPage(start, limit);
+                .list();
     }
 
     @Override
@@ -80,15 +88,15 @@ public class TaskQueryHandler extends ServiceFactory implements ActTaskQuery {
     }
 
 
-    public TaskQuery buildTaskQueryByVariables(Map<String, Object> args){
+    public TaskQuery buildTaskQueryByVariables(Map<String, Object> args) {
         TaskQuery tq = createTaskQuery();
-        if (args != null && args.size() >0) {
-            for(Entry<String, Object> entry : args.entrySet()){
+        if (args != null && args.size() > 0) {
+            for (Entry<String, Object> entry : args.entrySet()) {
                 if (VariablesEnum.activityName.toString().equals(entry.getKey()) ||
                         VariablesEnum.orgName.toString().equals(entry.getKey())) {
                     tq.processVariableValueLike(entry.getKey(), String.valueOf(entry.getValue()));
-                }else {
-                    tq.processVariableValueEquals(entry.getKey(),entry.getValue());
+                } else {
+                    tq.processVariableValueEquals(entry.getKey(), entry.getValue());
                 }
             }
         }

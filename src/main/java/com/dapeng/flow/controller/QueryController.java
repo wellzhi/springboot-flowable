@@ -2,14 +2,18 @@ package com.dapeng.flow.controller;
 
 
 import com.dapeng.flow.common.result.ResponseData;
+import com.dapeng.flow.common.utils.BeanUtil;
 import com.dapeng.flow.flowable.handler.HistTaskQueryHandler;
+import com.dapeng.flow.flowable.handler.TaskHandler;
 import com.dapeng.flow.flowable.handler.TaskQueryHandler;
+import com.dapeng.flow.repository.model.HistTaskVO;
+import com.dapeng.flow.repository.model.TaskVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.flowable.engine.HistoryService;
-import org.flowable.engine.TaskService;
+import org.flowable.engine.task.Comment;
 import org.flowable.task.api.Task;
 import org.flowable.task.api.history.HistoricTaskInstance;
 import org.slf4j.Logger;
@@ -38,7 +42,7 @@ public class QueryController {
 
     protected static Logger logger = LoggerFactory.getLogger(QueryController.class);
     @Autowired
-    private TaskService taskService;
+    private TaskHandler taskHandler;
     @Autowired
     private HistoryService historyService;
     @Autowired
@@ -46,13 +50,47 @@ public class QueryController {
     @Autowired
     private HistTaskQueryHandler histTaskQueryHandler;
 
+    @RequestMapping(value = "/task/taskId ", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "任务查询", produces = "application/json")
+    @ApiImplicitParams({@ApiImplicitParam(name = "taskId", value = "任务ID", required = true, dataType = "String")})
+    public ResponseData queryTask(String taskId) {
+        Task task = taskQueryHandler.taskId(taskId);
+        TaskVO taskVO = BeanUtil.copyBean(task, TaskVO.class);
+        return ResponseData.success(taskVO);
+    }
+
+    @RequestMapping(value = "/task/list/userId ", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "根据用户ID，查询该用户参与的活动任务列表", produces = "application/json")
+    @ApiImplicitParams({@ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "String")})
+    public ResponseData queryUserList(String userId) {
+        List<Task> tasks = taskQueryHandler.taskCandidateOrAssigned(userId);
+        List<TaskVO> list = BeanUtil.copyList(tasks,TaskVO.class);
+        return ResponseData.success(list);
+    }
+
+
+
+
+    @RequestMapping(value = "/comment ", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "查询批注信息", produces = "application/json")
+    @ApiImplicitParams({@ApiImplicitParam(name = "taskId", value = "任务ID", required = true, dataType = "String")})
+    public ResponseData getTaskComments(String taskId) throws Exception {
+        List<Comment> taskComments = taskHandler.getTaskComments(taskId);
+        return ResponseData.success(taskComments);
+    }
+
+
     @RequestMapping(value = "/task/list/instanceId", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "查询任务列表（所有）", produces = "application/json")
     @ApiImplicitParams({@ApiImplicitParam(name = "instanceId", value = "流程实例ID", required = true, dataType = "String")})
     public Object listByInstanceId(String instanceId) {
         List<HistoricTaskInstance> list = histTaskQueryHandler.listByInstanceId(instanceId);
-        return ResponseData.success(list);
+        List copyList = BeanUtil.copyList(list, HistTaskVO.class);
+        return ResponseData.success(copyList);
     }
 
     @RequestMapping(value = "/task/pageList/instanceId", method = RequestMethod.GET)
@@ -77,8 +115,9 @@ public class QueryController {
             @ApiImplicitParam(name = "page", value = "页码", required = false, defaultValue = "1", dataType = "int"),
             @ApiImplicitParam(name = "step", value = "数量", required = false, defaultValue = "20", dataType = "int")})
     public Object unclaim(String userId, Integer page, Integer step) {
-        List<Task> taskList = taskQueryHandler.taskCandidateOrAssigned(userId, page, step);
-        //List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(userId).finished().list();
+        //List<Task> taskList = taskQueryHandler.taskCandidateOrAssigned(userId, page, step);
+        //todo
+        List<Task> taskList = null;
         return ResponseData.success(taskList);
     }
 

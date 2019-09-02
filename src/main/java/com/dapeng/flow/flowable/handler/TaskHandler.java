@@ -1,9 +1,12 @@
 package com.dapeng.flow.flowable.handler;
 
+import com.dapeng.flow.common.utils.BeanUtil;
 import com.dapeng.flow.flowable.ActTask;
 import com.dapeng.flow.flowable.ServiceFactory;
+import com.dapeng.flow.repository.model.TaskVO;
 import org.flowable.engine.runtime.ChangeActivityStateBuilder;
 import org.flowable.engine.task.Comment;
+import org.flowable.task.api.Task;
 import org.flowable.task.api.history.HistoricTaskInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +26,8 @@ import java.util.Map;
  */
 @Component
 public class TaskHandler extends ServiceFactory implements ActTask {
+    @Autowired
+    private TaskQueryHandler taskQueryHandler;
 
     protected static Logger logger = LoggerFactory.getLogger(TaskHandler.class);
     @Autowired
@@ -31,19 +36,19 @@ public class TaskHandler extends ServiceFactory implements ActTask {
     private TaskHandler taskHandler;
 
     @Override
-    public void claim(String taskId, String userId) throws RuntimeException, Exception {
+    public void claim(String taskId, String userId){
 
         taskService.claim(taskId, userId);
     }
 
     @Override
-    public void unclaim(String taskId) throws RuntimeException, Exception {
+    public void unclaim(String taskId){
 
         taskService.unclaim(taskId);
     }
 
     @Override
-    public void complete(String taskId) throws RuntimeException, Exception {
+    public void complete(String taskId){
 
         this.complete(taskId, null);
 
@@ -51,16 +56,17 @@ public class TaskHandler extends ServiceFactory implements ActTask {
     }
 
     @Override
-    public void complete(String taskId, Map<String, Object> variables) throws RuntimeException, Exception {
+    public void complete(String taskId, Map<String, Object> variables){
 
         taskService.complete(taskId, variables);
     }
 
     @Override
     public Map<String, Object> complete(String taskId, Map<String, Object> variables, boolean localScope) {
-        HistoricTaskInstance finishTask = histTaskQueryHandler.finishedTask(taskId);
+        TaskVO finishTask = taskQueryHandler.queryTaskVOById(taskId);
         taskService.complete(taskId, variables, localScope);
-        HistoricTaskInstance activeTask = histTaskQueryHandler.activeTask(finishTask.getProcessInstanceId());
+        Task task = taskQueryHandler.processInstanceId(finishTask.getProcessInstanceId());
+        TaskVO activeTask = BeanUtil.copyBean(task, TaskVO.class);
         Map<String, Object> map = new HashMap<>(16);
         map.put("finish", finishTask);
         map.put("active", activeTask);
@@ -102,20 +108,20 @@ public class TaskHandler extends ServiceFactory implements ActTask {
     }
 
     @Override
-    public void addCandidateUser(String taskId, String userId) throws RuntimeException, Exception {
+    public void addCandidateUser(String taskId, String userId){
 
         taskService.addCandidateUser(taskId, userId);
     }
 
     @Override
     public Comment addComment(String taskId, String processInstanceId, String message)
-            throws RuntimeException, Exception {
+           {
 
         return taskService.addComment(taskId, processInstanceId, message);
     }
 
     @Override
-    public List<Comment> getTaskComments(String taskId) throws RuntimeException, Exception {
+    public List<Comment> getTaskComments(String taskId){
 
         return taskService.getTaskComments(taskId);
     }

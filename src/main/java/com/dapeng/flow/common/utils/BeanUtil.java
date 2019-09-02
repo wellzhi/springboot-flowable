@@ -2,6 +2,7 @@ package com.dapeng.flow.common.utils;
 
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -28,15 +29,14 @@ public class BeanUtil {
         return targetList;
     }
 
-    public static <T> T copyBean(T entity, @NotNull Class targetClass) {
-        Object target = null, source = null;
+    public static <T> T copyBean(Object source, @NotNull Class<T> targetClass, @Nullable String... ignoreProperties) {
+        T target = null;
         try {
-            source = entity.getClass().newInstance();
             target = targetClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        BeanUtils.copyProperties(source, target);
-        return (T) target;
+        BeanUtils.copyProperties(source, target, ignoreProperties);
+        return target;
     }
 }

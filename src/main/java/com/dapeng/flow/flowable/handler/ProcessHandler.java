@@ -7,8 +7,9 @@ import org.flowable.engine.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
+import org.springframework.util.Assert;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * 流程定义
@@ -37,7 +38,7 @@ public class ProcessHandler extends ServiceFactory implements ActProcess {
     }
 
     @Override
-    public ProcessDefinitionQuery createProcessDefinitionQuery(){
+    public ProcessDefinitionQuery createProcessDefinitionQuery() {
         return repositoryService.createProcessDefinitionQuery();
     }
 
@@ -82,9 +83,9 @@ public class ProcessHandler extends ServiceFactory implements ActProcess {
     }
 
     @Override
-    public Deployment deploy(String name, String category, InputStream in) {
-        Deployment deploy = createDeployment().addInputStream(name + BPMN_FILE_SUFFIX, in).name(name).category(category).deploy();
-        return deploy;
+    public Deployment deploy(String name, String tenantId, String category, InputStream in) {
+        return createDeployment().addInputStream(name + BPMN_FILE_SUFFIX, in)
+                .name(name).tenantId(tenantId).category(category).deploy();
 
     }
 
@@ -94,5 +95,13 @@ public class ProcessHandler extends ServiceFactory implements ActProcess {
         return processDefinition;
     }
 
+    @Override
+    public Deployment deployName(String deploymentName) {
+        List<Deployment> list = repositoryService
+                .createDeploymentQuery()
+                .deploymentName(deploymentName).list();
+        Assert.notNull(list, "list must not be null");
+        return list.get(0);
+    }
 
 }

@@ -2,11 +2,13 @@ package com.dapeng.flow.flowable;
 
 
 import org.flowable.engine.repository.*;
+import org.springframework.lang.Nullable;
 
 import java.io.InputStream;
 
 /**
  * 流程定义封装
+ *
  * @author liuxz
  * @date 2019/08/30
  */
@@ -17,6 +19,7 @@ public interface ActProcess {
      * @return
      */
     public DeploymentBuilder createDeployment();
+
     /**
      * 创建流程部署查询对象
      *
@@ -43,11 +46,12 @@ public interface ActProcess {
      * 部署流程定义---通过inputstream流
      *
      * @param name     流程模板文件名字
+     * @param tenantId 业务系统标识
      * @param category 流程模板文件类别
      * @param in       流程模板文件流
      * @return
      */
-    Deployment deploy(String name, String category, InputStream in);
+    Deployment deploy(String name, @Nullable String tenantId, @Nullable String category, InputStream in);
 
     /**
      * 部署流程定义
@@ -104,5 +108,11 @@ public interface ActProcess {
      */
     public ProcessDefinition queryByProcessDefinitionKey(String processDefinitionKey);
 
-
+    /**
+     * 根据流程部署name，查询流程部署信息（最新）
+     *
+     * @param deploymentName 流程部署name
+     * @return
+     */
+    Deployment deployName(String deploymentName);
 }

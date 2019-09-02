@@ -11,6 +11,9 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/workflow?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
 
+
+
+# flowable配置
 flowable:
   check-process-definitions: true #是否需要自动部署流程定义。
   cmmn:

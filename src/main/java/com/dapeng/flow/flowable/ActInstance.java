@@ -22,17 +22,6 @@ public interface ActInstance {
     ProcessInstance startProcessInstanceByKey(String processDefinitionKey);
 
     /**
-     * 启动流程实例并执行第一个流程任务---通过流程定义key（模板ID)
-     *
-     * @param processDefinitionKey 流程定义Key，不能为空.
-     * @param userId               流程实例启动者
-     * @param variables            流程变量
-     * @return
-     * @throws Exception
-     */
-    Map<String, Object> startInstanceAndExecuteFirstTask(String processDefinitionKey, String userId, Map<String, Object> variables) throws Exception;
-
-    /**
      * 启动流程实例---流程定义ID
      *
      * @param processDefinitionId 流程定义ID，不能为空.
@@ -51,6 +40,16 @@ public interface ActInstance {
     ProcessInstance startProcessInstanceByKey(String processDefinitionKey, Map<String, Object> variables);
 
     /**
+     * 启动流程实例--通过流程定义key、流程实例变量、业务系统标识
+     *
+     * @param processDefinitionKey 流程定义Key，不能为空.
+     * @param tenantId             业务系统标识.
+     * @param variables            要传递给流程实例的变量，可以为null.
+     * @return 流程实例对象
+     */
+    ProcessInstance startProcessInstanceByKeyAndTenantId(String processDefinitionKey, String tenantId, Map<String, Object> variables);
+
+    /**
      * 启动新流程实例----使用给定key在最新版本的流程定义中。
      * <p>
      * 可以提供业务key以将流程实例与具有明确业务含义的特定标识符相关联。
@@ -67,6 +66,18 @@ public interface ActInstance {
      * @throws Exception
      */
     ProcessInstance startProcessInstanceByKey(String processDefinitionKey, String businessKey, Map<String, Object> variables) throws Exception;
+
+    /**
+     * 启动流程实例--通过流程定义key、业务主键key、流程实例变量、业务系统标识
+     *
+     * @param processDefinitionKey 流程定义Key，不能为空.
+     * @param businessKey          业务主键key.
+     * @param tenantId             业务系统标识.
+     * @param variables            要传递给流程实例的变量，可以为null.
+     * @return 流程实例对象
+     */
+    ProcessInstance startProcessInstanceByKeyAndTenantId(String processDefinitionKey, String businessKey,
+                                                         String tenantId, Map<String, Object> variables);
 
     /**
      * 中断流程实例
@@ -111,4 +122,15 @@ public interface ActInstance {
      * @param processInstanceId 流程实例ID
      */
     void activateProcessInstanceById(String processInstanceId);
+
+    /**
+     * 启动流程实例并执行第一个流程任务，并且设置下一任务处理人---通过流程定义key（模板ID)
+     *
+     * @param processDefinitionKey 流程定义Key，不能为空.
+     * @param tenantId             业务系统标识.
+     * @param userId               流程实例启动人.
+     * @param variables            流程实例变量.
+     * @return
+     */
+    Map<String, Object> startInstanceAndExecuteFirstTask(String processDefinitionKey, String tenantId, String userId, Map<String, Object> variables);
 }

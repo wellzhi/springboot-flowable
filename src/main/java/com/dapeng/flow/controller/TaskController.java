@@ -5,6 +5,7 @@ import com.dapeng.flow.common.result.ResponseData;
 import com.dapeng.flow.flowable.handler.InstanceHandler;
 import com.dapeng.flow.flowable.handler.TaskHandler;
 import com.dapeng.flow.flowable.handler.TaskQueryHandler;
+import com.dapeng.flow.repository.model.TaskVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -108,28 +109,6 @@ public class TaskController {
     public ResponseData assignee(String taskId, String userId) throws Exception {
         taskHandler.setAssignee(taskId, userId);
         return ResponseData.success("任务转办成功");
-    }
-
-
-    @RequestMapping(value = "/query/taskId ", method = RequestMethod.GET)
-    @ResponseBody
-    @ApiOperation(value = "任务查询", produces = "application/json")
-    @ApiImplicitParams({@ApiImplicitParam(name = "taskId", value = "任务ID", required = true, dataType = "String")})
-    public ResponseData assignee(String taskId) throws Exception {
-        Task task = taskQueryHandler.taskId(taskId);
-        //TaskVO taskVO = new TaskVO();
-        //BeanUtils.copyProperties(task,taskVO);
-        return ResponseData.success(task);
-    }
-
-
-    @RequestMapping(value = "/comment/query ", method = RequestMethod.GET)
-    @ResponseBody
-    @ApiOperation(value = "查询批注信息", produces = "application/json")
-    @ApiImplicitParams({@ApiImplicitParam(name = "taskId", value = "任务ID", required = true, dataType = "String")})
-    public ResponseData getTaskComments(String taskId) throws Exception {
-        List<Comment> taskComments = taskHandler.getTaskComments(taskId);
-        return ResponseData.success(taskComments);
     }
 
 

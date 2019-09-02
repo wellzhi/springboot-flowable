@@ -1,6 +1,7 @@
 package com.dapeng.flow.flowable;
 
 
+import com.dapeng.flow.repository.model.TaskVO;
 import org.flowable.task.api.Task;
 import org.flowable.task.api.TaskQuery;
 import org.flowable.task.api.history.HistoricTaskInstance;
@@ -57,6 +58,15 @@ public interface ActTaskQuery {
     public Task taskId(String taskId);
 
     /**
+     * 执行流程任务
+     *
+     * @param taskId 流程任务ID.
+     * @return TaskVO  流程任务自定义封装类.
+     */
+
+    public TaskVO queryTaskVOById(String taskId);
+
+    /**
      * 查询活动的流程任务
      *
      * @param processInstanceId 流程实例ID.
@@ -90,11 +100,9 @@ public interface ActTaskQuery {
      * 通过用户标识(实际参与者、或候选人)，分页查询任务列表
      *
      * @param userId 用户标识.
-     * @param start
-     * @param limit
      * @return List<Task>  流程任务列表.
      */
-    public List<Task> taskCandidateOrAssigned(String userId, int start, int limit);
+    public List<Task> taskCandidateOrAssigned(String userId);
 
     /**
      * 通过用户标识(或候选人)，分页查询任务列表

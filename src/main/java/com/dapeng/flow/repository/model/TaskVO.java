@@ -1,6 +1,4 @@
 package com.dapeng.flow.repository.model;
-
-
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,10 +8,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * activiti大部分方法返回的实体类中，由于存在转json时的懒加载问题，需要自定义实体类接收。
+ * Auto-generated: 2019-09-02 11:55:26
  *
  * @author liuxz
- * @since 2019-08-27
+ * @date 2019.09.01
  */
 @Data
 @AllArgsConstructor
@@ -36,16 +34,29 @@ public class TaskVO implements Serializable {
     private Date dueDate;
     private Integer suspensionState;
     private String category;
-    private boolean isIdentityLinksInitialized;
+    private Boolean isIdentityLinksInitialized;
     private String executionId;
     private String processInstanceId;
     private String processDefinitionId;
+    private String taskDefinitionId;
+    private String scopeId;
+    private String subScopeId;
+    private String scopeType;
+    private String scopeDefinitionId;
     private String taskDefinitionKey;
     private String formKey;
-    private boolean isDeleted;
-    private boolean isCanceled;
-    private String eventName;
-    private String tenantId;
-    private boolean forcedUpdate;
+    private Boolean isCanceled;
+    private Boolean isCountEnabled;
+    private Integer variableCount;
+    private Integer identityLinkCount;
+    private Integer subTaskCount;
     private Date claimTime;
+    private String tenantId;
+    private String eventName;
+    private String eventHandlerId;
+    private String idPrefix;
+    private Boolean forcedUpdate;
+    private Boolean isInserted;
+    private Boolean isUpdated;
+    private Boolean isDeleted;
 }
