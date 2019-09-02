@@ -92,17 +92,15 @@ public interface ActTask {
      *
      * @param taskId 任务的id，不能为null.
      * @param userId 接受所有权的人.
-     *
      */
 
-    public void setAssignee(String taskId, String userId) ;
+    public void setAssignee(String taskId, String userId);
 
     /**
      * 任务委派
      *
      * @param taskId 任务的id，不能为null.
      * @param userId 被委派人ID.
-     *
      */
     void delegate(String taskId, String userId);
 
@@ -169,4 +167,12 @@ public interface ActTask {
      */
     public List<Comment> getTaskComments(String taskId) throws Exception;
 
+    /**
+     * 任务撤回
+     *
+     * @param processInstanceId 流程实例ID.
+     * @param currentActivityId 当前活动任务ID.
+     * @param newActivityId     撤回到达的任务ID.
+     */
+    void withdraw(String processInstanceId, String currentActivityId, String newActivityId);
 }

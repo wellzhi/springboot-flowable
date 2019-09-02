@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,13 +75,13 @@ public class TaskHandler extends ServiceFactory implements ActTask {
 
 
     @Override
-    public void resolveTask(String taskId)   {
+    public void resolveTask(String taskId) {
         taskService.resolveTask(taskId);
     }
 
 
     @Override
-    public void setAssignee(String taskId, String userId)  {
+    public void setAssignee(String taskId, String userId) {
 
         taskService.setAssignee(taskId, userId);
     }
@@ -117,6 +118,17 @@ public class TaskHandler extends ServiceFactory implements ActTask {
     public List<Comment> getTaskComments(String taskId) throws RuntimeException, Exception {
 
         return taskService.getTaskComments(taskId);
+    }
+
+    @Override
+    public void withdraw(String processInstanceId, String currentActivityId, String newActivityId) {
+        //List<String> currentActivityIds = new ArrayList<>();
+        //currentActivityIds.add(currentActivityId);
+        runtimeService.createChangeActivityStateBuilder()
+                .processInstanceId(processInstanceId)
+                //.moveActivityIdsToSingleActivityId(currentActivityIds, newActivityId)
+                .moveActivityIdTo(currentActivityId, newActivityId)
+                .changeState();
     }
 
     @Override
