@@ -85,13 +85,19 @@ public class ProcessHandler extends ServiceFactory implements ActProcess {
     @Override
     public Deployment deploy(String name, String tenantId, String category, InputStream in) {
         return createDeployment().addInputStream(name + BPMN_FILE_SUFFIX, in)
-                .name(name).tenantId(tenantId).category(category).deploy();
+                .name(name)
+                .tenantId(tenantId)
+                .category(category)
+                .deploy();
 
     }
 
     @Override
     public ProcessDefinition queryByProcessDefinitionKey(String processDefinitionKey) {
-        ProcessDefinition processDefinition = createProcessDefinitionQuery().processDefinitionKey(processDefinitionKey).active().singleResult();
+        ProcessDefinition processDefinition
+                = createProcessDefinitionQuery()
+                .processDefinitionKey(processDefinitionKey)
+                .active().singleResult();
         return processDefinition;
     }
 
@@ -102,6 +108,11 @@ public class ProcessHandler extends ServiceFactory implements ActProcess {
                 .deploymentName(deploymentName).list();
         Assert.notNull(list, "list must not be null");
         return list.get(0);
+    }
+
+    @Override
+    public void addCandidateStarterUser(String processDefinitionKey,String userId) {
+        repositoryService.addCandidateStarterUser(processDefinitionKey,userId);
     }
 
 }

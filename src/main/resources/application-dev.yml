@@ -145,6 +145,6 @@ flowable:
 management:
   endpoint:
     flowable:
-      cache:
-        time-to-live: 0ms # 缓存响应的最大时间。'
+#      cache:
+#        time-to-live: 0ms # 缓存响应的最大时间。'
       enabled: true # 是否启用flowable端点。'

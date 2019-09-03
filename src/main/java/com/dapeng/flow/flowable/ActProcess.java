@@ -1,6 +1,7 @@
 package com.dapeng.flow.flowable;
 
 
+import org.flowable.common.engine.api.FlowableObjectNotFoundException;
 import org.flowable.engine.repository.*;
 import org.springframework.lang.Nullable;
 
@@ -115,4 +116,13 @@ public interface ActProcess {
      * @return
      */
     Deployment deployName(String deploymentName);
+
+    /**
+     * 给流程定义授权用户
+     *
+     * @param processDefinitionKey 流程定义key
+     * @param userId               流程定义key
+     * @throws FlowableObjectNotFoundException 当流程定义或用户不存在时.
+     */
+    void addCandidateStarterUser(String processDefinitionKey, String userId);
 }

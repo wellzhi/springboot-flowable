@@ -62,11 +62,11 @@
         </root>
     </loggers>
     <!-- druid配置 -->
-    <logger name="druid.sql.Statement" level="debug" additivity="false">
+    <!--<logger name="druid.sql.Statement" level="debug" additivity="false">
         <appender-ref ref="Console"/>
     </logger>
     <logger name="druid.sql.ResultSet" level="debug" additivity="false">
         <appender-ref ref="Console"/>
-    </logger>
+    </logger>-->
  
 </configuration>

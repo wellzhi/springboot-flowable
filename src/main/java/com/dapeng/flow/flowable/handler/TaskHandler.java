@@ -36,19 +36,19 @@ public class TaskHandler extends ServiceFactory implements ActTask {
     private TaskHandler taskHandler;
 
     @Override
-    public void claim(String taskId, String userId){
+    public void claim(String taskId, String userId) {
 
         taskService.claim(taskId, userId);
     }
 
     @Override
-    public void unclaim(String taskId){
+    public void unclaim(String taskId) {
 
         taskService.unclaim(taskId);
     }
 
     @Override
-    public void complete(String taskId){
+    public void complete(String taskId) {
 
         this.complete(taskId, null);
 
@@ -56,7 +56,7 @@ public class TaskHandler extends ServiceFactory implements ActTask {
     }
 
     @Override
-    public void complete(String taskId, Map<String, Object> variables){
+    public void complete(String taskId, Map<String, Object> variables) {
 
         taskService.complete(taskId, variables);
     }
@@ -108,31 +108,27 @@ public class TaskHandler extends ServiceFactory implements ActTask {
     }
 
     @Override
-    public void addCandidateUser(String taskId, String userId){
+    public void addCandidateUser(String taskId, String userId) {
 
         taskService.addCandidateUser(taskId, userId);
     }
 
     @Override
-    public Comment addComment(String taskId, String processInstanceId, String message)
-           {
+    public Comment addComment(String taskId, String processInstanceId, String message) {
 
         return taskService.addComment(taskId, processInstanceId, message);
     }
 
     @Override
-    public List<Comment> getTaskComments(String taskId){
+    public List<Comment> getTaskComments(String taskId) {
 
         return taskService.getTaskComments(taskId);
     }
 
     @Override
     public void withdraw(String processInstanceId, String currentActivityId, String newActivityId) {
-        //List<String> currentActivityIds = new ArrayList<>();
-        //currentActivityIds.add(currentActivityId);
         runtimeService.createChangeActivityStateBuilder()
                 .processInstanceId(processInstanceId)
-                //.moveActivityIdsToSingleActivityId(currentActivityIds, newActivityId)
                 .moveActivityIdTo(currentActivityId, newActivityId)
                 .changeState();
     }

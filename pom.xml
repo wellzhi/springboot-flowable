@@ -17,7 +17,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<mysql.java.version>5.1.39</mysql.java.version>
-		<flowable.version>6.4.2</flowable.version>
+		<flowable.version>6.4.0</flowable.version>
 		<swagger.version>2.8.0</swagger.version>
 		<lombok.version>1.18.8</lombok.version>
 		<druid.version>1.1.13</druid.version>
@@ -29,8 +29,8 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 			<!-- 排除默认的logback日志，使用log4j-->
-			<exclusions>
-				<!--TODO 详细druid日志可取消该注释-->
+			<!--<exclusions>
+				&lt;!&ndash;TODO 详细druid日志可取消该注释&ndash;&gt;
 				<exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-logging</artifactId>
@@ -39,7 +39,7 @@
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-log4j12</artifactId>
                 </exclusion>
-			</exclusions>
+			</exclusions>-->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -112,5 +112,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
