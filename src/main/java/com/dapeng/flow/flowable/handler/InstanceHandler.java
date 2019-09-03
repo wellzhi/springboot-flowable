@@ -1,12 +1,14 @@
 package com.dapeng.flow.flowable.handler;
 
 
-
 import com.dapeng.flow.common.utils.BeanUtil;
 import com.dapeng.flow.flowable.ActInstance;
 import com.dapeng.flow.flowable.ServiceFactory;
 import com.dapeng.flow.repository.model.TaskVO;
 import org.apache.commons.lang3.StringUtils;
+import org.flowable.engine.impl.cmd.AddMultiInstanceExecutionCmd;
+import org.flowable.engine.impl.cmd.DeleteMultiInstanceExecutionCmd;
+import org.flowable.engine.runtime.Execution;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.task.api.Task;
 import org.slf4j.Logger;
@@ -117,7 +119,7 @@ public class InstanceHandler extends ServiceFactory implements ActInstance {
         ProcessInstance pi = null;
         if (StringUtils.isNotBlank(tenantId)) {
             pi = runtimeService.startProcessInstanceByKeyAndTenantId(processDefinitionKey, variables, tenantId);
-        }else {
+        } else {
             pi = runtimeService.startProcessInstanceByKey(processDefinitionKey, variables);
         }
         String instanceId = pi.getProcessInstanceId();
@@ -139,6 +141,16 @@ public class InstanceHandler extends ServiceFactory implements ActInstance {
         map.put("finish", taskVO);
         map.put("active", activeTaskVO);
         return map;
+    }
+
+    @Override
+    public void addMultiInstanceExecutionCmd(String activityDefId, String instanceId, Map<String, Object> variables) {
+        managementService.executeCommand(new AddMultiInstanceExecutionCmd(activityDefId, instanceId, variables));
+    }
+
+    @Override
+    public void deleteMultiInstanceExecutionCmd(String currentChildExecutionId, boolean flag) {
+        managementService.executeCommand(new DeleteMultiInstanceExecutionCmd(currentChildExecutionId, flag));
     }
 
 }

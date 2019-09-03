@@ -133,4 +133,23 @@ public interface ActInstance {
      * @return
      */
     Map<String, Object> startInstanceAndExecuteFirstTask(String processDefinitionKey, String tenantId, String userId, Map<String, Object> variables);
+
+    /**
+     * 多实例加签
+     *
+     * @param activityDefId 流程环节定义Key，不能为空.
+     * @param instanceId    流程实例ID.
+     * @param variables     流程实例变量.
+     * @return
+     */
+    void addMultiInstanceExecutionCmd(String activityDefId, String instanceId, Map<String, Object> variables);
+
+    /**
+     * 多实例减签
+     *
+     * @param currentChildExecutionId 流程环节定义Key，不能为空.
+     * @param flag                    流程实例ID.
+     * @return
+     */
+    void deleteMultiInstanceExecutionCmd(String currentChildExecutionId, boolean flag);
 }
