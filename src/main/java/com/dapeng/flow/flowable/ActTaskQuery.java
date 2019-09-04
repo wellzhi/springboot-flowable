@@ -34,6 +34,13 @@ public interface ActTaskQuery {
     public String findVariableByTaskId(String taskId, String variableName);
 
     /**
+     * 根据流程实例ID,查询活动任务列表（多实例）
+     *
+     * @param processInstanceId 流程实例ID.
+     */
+    List<Task> processInstanceId4Multi(String processInstanceId);
+
+    /**
      * 查询任务业务主键
      *
      * @param taskId 流程任务ID.
@@ -198,6 +205,7 @@ public interface ActTaskQuery {
      * @return List<Task>  历史流程任务列表.
      */
     public List<HistoricTaskInstance> taskAssigneeHistory(String userId, int start, int limit);
+
     /**
      * 分页查询活动任务列表
      *

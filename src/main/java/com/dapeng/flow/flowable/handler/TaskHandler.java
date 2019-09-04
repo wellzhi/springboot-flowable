@@ -1,19 +1,16 @@
 package com.dapeng.flow.flowable.handler;
 
-import com.dapeng.flow.common.utils.BeanUtil;
+import com.dapeng.flow.common.utils.BeanUtils;
 import com.dapeng.flow.flowable.ActTask;
 import com.dapeng.flow.flowable.ServiceFactory;
 import com.dapeng.flow.repository.model.TaskVO;
-import org.flowable.engine.runtime.ChangeActivityStateBuilder;
 import org.flowable.engine.task.Comment;
 import org.flowable.task.api.Task;
-import org.flowable.task.api.history.HistoricTaskInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +63,7 @@ public class TaskHandler extends ServiceFactory implements ActTask {
         TaskVO finishTask = taskQueryHandler.queryTaskVOById(taskId);
         taskService.complete(taskId, variables, localScope);
         Task task = taskQueryHandler.processInstanceId(finishTask.getProcessInstanceId());
-        TaskVO activeTask = BeanUtil.copyBean(task, TaskVO.class);
+        TaskVO activeTask = BeanUtils.copyBean(task, TaskVO.class);
         Map<String, Object> map = new HashMap<>(16);
         map.put("finish", finishTask);
         map.put("active", activeTask);

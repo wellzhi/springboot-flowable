@@ -2,7 +2,7 @@ package com.dapeng.flow.controller;
 
 
 import com.dapeng.flow.common.result.ResponseData;
-import com.dapeng.flow.common.utils.BeanUtil;
+import com.dapeng.flow.common.utils.BeanUtils;
 import com.dapeng.flow.flowable.handler.HistTaskQueryHandler;
 import com.dapeng.flow.flowable.handler.TaskHandler;
 import com.dapeng.flow.flowable.handler.TaskQueryHandler;
@@ -56,7 +56,7 @@ public class QueryController {
     @ApiImplicitParams({@ApiImplicitParam(name = "taskId", value = "任务ID", required = true, dataType = "String")})
     public ResponseData queryTask(String taskId) {
         Task task = taskQueryHandler.taskId(taskId);
-        TaskVO taskVO = BeanUtil.copyBean(task, TaskVO.class);
+        TaskVO taskVO = BeanUtils.copyBean(task, TaskVO.class);
         return ResponseData.success(taskVO);
     }
 
@@ -66,7 +66,7 @@ public class QueryController {
     @ApiImplicitParams({@ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "String")})
     public ResponseData queryUserList(String userId) {
         List<Task> tasks = taskQueryHandler.taskCandidateOrAssigned(userId);
-        List<TaskVO> list = BeanUtil.copyList(tasks,TaskVO.class);
+        List<TaskVO> list = BeanUtils.copyList(tasks,TaskVO.class);
         return ResponseData.success(list);
     }
 
@@ -89,7 +89,7 @@ public class QueryController {
     @ApiImplicitParams({@ApiImplicitParam(name = "instanceId", value = "流程实例ID", required = true, dataType = "String")})
     public Object listByInstanceId(String instanceId) {
         List<HistoricTaskInstance> list = histTaskQueryHandler.listByInstanceId(instanceId);
-        List copyList = BeanUtil.copyList(list, HistTaskVO.class);
+        List copyList = BeanUtils.copyList(list, HistTaskVO.class);
         return ResponseData.success(copyList);
     }
 
@@ -115,10 +115,9 @@ public class QueryController {
             @ApiImplicitParam(name = "page", value = "页码", required = false, defaultValue = "1", dataType = "int"),
             @ApiImplicitParam(name = "step", value = "数量", required = false, defaultValue = "20", dataType = "int")})
     public Object unclaim(String userId, Integer page, Integer step) {
-        //List<Task> taskList = taskQueryHandler.taskCandidateOrAssigned(userId, page, step);
-        //todo
-        List<Task> taskList = null;
-        return ResponseData.success(taskList);
+        List<Task> taskList = taskQueryHandler.taskCandidateUser(userId, page, step);
+        List list = BeanUtils.copyList(taskList, TaskVO.class);
+        return ResponseData.success(list);
     }
 
     @RequestMapping(value = "/task/list/claimed", method = RequestMethod.GET)

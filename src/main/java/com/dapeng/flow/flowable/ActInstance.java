@@ -142,7 +142,7 @@ public interface ActInstance {
      * @param variables     流程实例变量.
      * @return
      */
-    void addMultiInstanceExecutionCmd(String activityDefId, String instanceId, Map<String, Object> variables);
+    void addMultiInstanceExecution(String activityDefId, String instanceId, Map<String, Object> variables);
 
     /**
      * 多实例减签
@@ -151,5 +151,5 @@ public interface ActInstance {
      * @param flag                    流程实例ID.
      * @return
      */
-    void deleteMultiInstanceExecutionCmd(String currentChildExecutionId, boolean flag);
+    void deleteMultiInstanceExecution(String currentChildExecutionId, boolean flag);
 }

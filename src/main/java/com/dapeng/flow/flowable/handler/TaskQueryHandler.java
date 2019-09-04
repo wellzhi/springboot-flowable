@@ -1,7 +1,7 @@
 package com.dapeng.flow.flowable.handler;
 
 
-import com.dapeng.flow.common.utils.BeanUtil;
+import com.dapeng.flow.common.utils.BeanUtils;
 import com.dapeng.flow.flowable.ActTaskQuery;
 import com.dapeng.flow.flowable.ServiceFactory;
 import com.dapeng.flow.flowable.common.VariablesEnum;
@@ -14,7 +14,9 @@ import org.flowable.task.api.history.HistoricTaskInstanceQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -26,6 +28,7 @@ import java.util.Map.Entry;
  * @date 2019/08/30
  */
 @Component
+@Transactional(rollbackFor = Exception.class)
 public class TaskQueryHandler extends ServiceFactory implements ActTaskQuery {
 
     protected static Logger logger = LoggerFactory.getLogger(TaskQueryHandler.class);
@@ -51,7 +54,7 @@ public class TaskQueryHandler extends ServiceFactory implements ActTaskQuery {
     public TaskVO queryTaskVOById(String taskId) {
 
         Task task = createTaskQuery().taskId(taskId).singleResult();
-        return BeanUtil.copyBean(task, TaskVO.class);
+        return BeanUtils.copyBean(task, TaskVO.class);
     }
 
     @Override
@@ -175,6 +178,21 @@ public class TaskQueryHandler extends ServiceFactory implements ActTaskQuery {
     public Task processInstanceId(String processInstanceId) {
 
         return createTaskQuery().processInstanceId(processInstanceId).active().singleResult();
+    }
+
+    @Override
+    public List<Task> processInstanceId4Multi(String processInstanceId) {
+        List<Task> resultList = new ArrayList<>();
+        TaskQuery taskQuery = createTaskQuery().processInstanceId(processInstanceId).active();
+
+        long count = taskQuery.count();
+        //多实例情况，当前活动任务不止一条数据
+        if (count > 1) {
+            resultList.addAll(taskQuery.list());
+        } else {
+            resultList.add(taskQuery.singleResult());
+        }
+        return resultList;
     }
 
     @Override

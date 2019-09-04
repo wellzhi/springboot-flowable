@@ -2,7 +2,7 @@ package com.dapeng.flow.controller;
 
 
 import com.dapeng.flow.common.result.ResponseData;
-import com.dapeng.flow.common.utils.BeanUtil;
+import com.dapeng.flow.common.utils.BeanUtils;
 import com.dapeng.flow.flowable.handler.InstanceHandler;
 import com.dapeng.flow.flowable.handler.ProcessHandler;
 import com.dapeng.flow.repository.model.DeploymentVO;
@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 
 /**
@@ -117,7 +116,7 @@ public class ProcessController {
             }
         }
         //忽略二进制文件（模板文件、模板图片）返回
-        DeploymentVO deploymentVO = BeanUtil.copyBean(deploy, DeploymentVO.class, "resources");
+        DeploymentVO deploymentVO = BeanUtils.copyBean(deploy, DeploymentVO.class, "resources");
         return ResponseData.success(deploymentVO);
     }
 }

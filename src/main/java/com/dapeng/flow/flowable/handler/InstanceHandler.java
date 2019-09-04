@@ -1,14 +1,13 @@
 package com.dapeng.flow.flowable.handler;
 
 
-import com.dapeng.flow.common.utils.BeanUtil;
+import com.dapeng.flow.common.utils.BeanUtils;
 import com.dapeng.flow.flowable.ActInstance;
 import com.dapeng.flow.flowable.ServiceFactory;
 import com.dapeng.flow.repository.model.TaskVO;
 import org.apache.commons.lang3.StringUtils;
 import org.flowable.engine.impl.cmd.AddMultiInstanceExecutionCmd;
 import org.flowable.engine.impl.cmd.DeleteMultiInstanceExecutionCmd;
-import org.flowable.engine.runtime.Execution;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.task.api.Task;
 import org.slf4j.Logger;
@@ -29,8 +28,6 @@ import java.util.Map;
 public class InstanceHandler extends ServiceFactory implements ActInstance {
 
     protected static Logger logger = LoggerFactory.getLogger(InstanceHandler.class);
-    @Autowired
-    private HistTaskQueryHandler histTaskQueryHandler;
     @Autowired
     private TaskHandler taskHandler;
     @Autowired
@@ -135,21 +132,22 @@ public class InstanceHandler extends ServiceFactory implements ActInstance {
         Map<String, Object> map = new HashMap<>(16);
         logger.info("旧任务ID{}--新任务ID:{}", id, activeTask.getId());
         //剔除返回懒加载属性，否则json解析报错
-        TaskVO taskVO = BeanUtil.copyBean(task, TaskVO.class);
-        TaskVO activeTaskVO = BeanUtil.copyBean(activeTask, TaskVO.class);
+        TaskVO taskVO = BeanUtils.copyBean(task, TaskVO.class);
+        TaskVO activeTaskVO = BeanUtils.copyBean(activeTask, TaskVO.class);
 
         map.put("finish", taskVO);
         map.put("active", activeTaskVO);
+
         return map;
     }
 
     @Override
-    public void addMultiInstanceExecutionCmd(String activityDefId, String instanceId, Map<String, Object> variables) {
+    public void addMultiInstanceExecution(String activityDefId, String instanceId, Map<String, Object> variables) {
         managementService.executeCommand(new AddMultiInstanceExecutionCmd(activityDefId, instanceId, variables));
     }
 
     @Override
-    public void deleteMultiInstanceExecutionCmd(String currentChildExecutionId, boolean flag) {
+    public void deleteMultiInstanceExecution(String currentChildExecutionId, boolean flag) {
         managementService.executeCommand(new DeleteMultiInstanceExecutionCmd(currentChildExecutionId, flag));
     }
 

@@ -1,7 +1,6 @@
 package com.dapeng.flow.common.utils;
 
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
@@ -11,7 +10,7 @@ import java.util.List;
 /**
  * @author liuxz
  */
-public class BeanUtil {
+public class BeanUtils {
 
 
     public static List copyList(List<? extends Object> sourceList, @NotNull Class targetClass) {
@@ -23,7 +22,7 @@ public class BeanUtil {
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
-            BeanUtils.copyProperties(source, target);
+            org.springframework.beans.BeanUtils.copyProperties(source, target);
             targetList.add(target);
         }
         return targetList;
@@ -36,7 +35,7 @@ public class BeanUtil {
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        BeanUtils.copyProperties(source, target, ignoreProperties);
+        org.springframework.beans.BeanUtils.copyProperties(source, target, ignoreProperties);
         return target;
     }
 }
