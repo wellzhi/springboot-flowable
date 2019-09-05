@@ -13,10 +13,9 @@ import java.util.*;
 
 
 /**
- * Class to generate an image based the diagram interchange information in a BPMN 2.0 process.
+ *生成图像
  *
- * @author Joram Barrez
- * @author Tijs Rademakers
+ * @author liuxz
  */
 public class CustomProcessDiagramGenerator implements ProcessDiagramGenerator {
     protected static final Logger logger = LoggerFactory.getLogger(CustomProcessDiagramGenerator.class);

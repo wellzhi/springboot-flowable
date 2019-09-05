@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * activiti6流程图绘制
+ * flowable流程图绘制
  *
  * @author liuxz
  */

@@ -1,6 +1,8 @@
 package com.dapeng.flow.repository.service;
 
 /**
+ * 流程追踪图生成类
+ *
  * @author liuxz
  */
 public interface ImageService {
