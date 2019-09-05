@@ -25,22 +25,16 @@ import java.util.Map;
 public class TaskHandler extends ServiceFactory implements ActTask {
     @Autowired
     private TaskQueryHandler taskQueryHandler;
-
     protected static Logger logger = LoggerFactory.getLogger(TaskHandler.class);
-    @Autowired
-    private HistTaskQueryHandler histTaskQueryHandler;
-    @Autowired
-    private TaskHandler taskHandler;
+
 
     @Override
     public void claim(String taskId, String userId) {
-
         taskService.claim(taskId, userId);
     }
 
     @Override
     public void unclaim(String taskId) {
-
         taskService.unclaim(taskId);
     }
 
@@ -48,13 +42,11 @@ public class TaskHandler extends ServiceFactory implements ActTask {
     public void complete(String taskId) {
 
         this.complete(taskId, null);
-
         logger.info("-----------任务ID：{},已完成-----------", taskId);
     }
 
     @Override
     public void complete(String taskId, Map<String, Object> variables) {
-
         taskService.complete(taskId, variables);
     }
 
@@ -72,20 +64,19 @@ public class TaskHandler extends ServiceFactory implements ActTask {
 
     @Override
     public void delegate(String taskId, String userId) {
-
         taskService.delegateTask(taskId, userId);
     }
 
 
     @Override
     public void resolveTask(String taskId) {
+
         taskService.resolveTask(taskId);
     }
 
 
     @Override
     public void setAssignee(String taskId, String userId) {
-
         taskService.setAssignee(taskId, userId);
     }
 

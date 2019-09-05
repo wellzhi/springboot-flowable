@@ -10,7 +10,11 @@ spring:
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/workflow?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
-
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100M
+      max-request-size: 500M
 
 
 # flowable配置
