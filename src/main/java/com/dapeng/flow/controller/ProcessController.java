@@ -14,14 +14,12 @@ import org.flowable.engine.repository.Deployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+
 
 
 /**
@@ -42,72 +40,20 @@ public class ProcessController {
     private ProcessHandler processHandler;
 
 
-    /**
-     * 部署流程定义
-     */
-    @RequestMapping(value = "/deploy/repeat", method = RequestMethod.GET)
-    @ResponseBody
-    @ApiOperation(value = "部署流程定义(每次都部署）", produces = "application/json")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "name", value = "流程定义名称（即：模板ID）", required = true, dataType = "String")
-    })
-    public ResponseData<Deployment> deployRepeat(String name) {
-        logger.info("部署流程定义start");
-        Deployment deploy = processHandler.deploy("processes/bpmn/leaveNew.bpmn", "processes/bpmn/leaveNew.png", name, "leave category");
-        logger.info("部署流程定义end--{}:{}", deploy.getId(), deploy.getName());
-        return ResponseData.success(deploy);
-    }
-
-
-    /**
-     * 部署流程定义
-     */
-    @RequestMapping(value = "/deploy/noRepeat", method = RequestMethod.GET)
-    @ResponseBody
-    @ApiOperation(value = "部署流程定义(仅首次部署）", produces = "application/json")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "name", value = "流程定义名称（即：模板ID）", required = true, dataType = "String")
-    })
-    public ResponseData<Deployment> deployNoRepeat(String name) {
-
-        boolean exist = processHandler.exist(name);
-        if (!exist) {
-            logger.info("部署流程定义start");
-            Deployment deploy = processHandler.deploy("processes/bpmn/test/test/leaveNew.bpmn", "processes/bpmn/test/test/leaveNew.png", name, "leave category");
-            logger.info("部署流程定义end--{}:{}", deploy.getId(), deploy.getName());
-            return ResponseData.success(deploy);
-        }
-        return ResponseData.success();
-    }
-
-
-    //@PostMapping(value = "/deploy/files", headers = "content-type=multipart/form-data")
     @RequestMapping(value = "/deploy/files", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
-    @ApiOperation(value = "一次部署多个流程定义文件", notes = "对于调用式的主子流程模板，需要一起部署")
+    @ApiOperation(value = "一次部署多个流程定义文件（待完善）", notes = "对于调用式的主子流程模板，需要一起部署")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "name", value = "主模板名称（模板ID）", required = true, dataType = "String"),
             @ApiImplicitParam(name = "category", value = "模板类别", required = false, dataType = "String"),
             @ApiImplicitParam(name = "tenantId", value = "系统标识", required = false, dataType = "String"),
-            //@ApiImplicitParam(name = "files", value = "模板文件", required = true, allowMultiple = true, dataType = "__file")
+            @ApiImplicitParam(name = "file", value = "模板文件", required = true, allowMultiple = true, dataType = "__file")
     })
     @ResponseBody
-    public ResponseData filesUpload(String name, String category, String tenantId, MultipartFile[] files) {
-        int len = files.length;
-
-        if (null != files && files.length > 0) {
-            for (int i = 0; i < files.length; i++) {
-                String name1 = files[i].getName();
-                logger.error(name1);
-            }
-        }
-        return null;
+    public ResponseData filesUpload(String name, String category, String tenantId, MultipartFile[] file) {
+        int len = file.length;
+        return ResponseData.success("长度：" + len);
     }
 
-    @RequestMapping(value = "/deployModels", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseData filesUpload(@RequestParam("files") MultipartFile[] files) {
-        int length = files.length;
-        return null;
-    }
 
     /**
      * 部署流程定义

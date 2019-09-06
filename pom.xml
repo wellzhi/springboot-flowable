@@ -102,12 +102,6 @@
 			<artifactId>mybatis-plus-boot-starter</artifactId>
 			<version>${mybatis.plus.version}</version>
 		</dependency>-->
-		<!--sapi依赖-->
-		<!--<dependency>
-			<groupId>com.github.xiaour</groupId>
-			<artifactId>xiaour.springboot.sapi.starter</artifactId>
-			<version>1.4</version>
-		</dependency>-->
 	</dependencies>
 
 	<build>

@@ -13,8 +13,8 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 100M
-      max-request-size: 500M
+      max-file-size: 100MB
+      max-request-size: 500MB
 
 
 # flowable配置
@@ -149,6 +149,6 @@ flowable:
 management:
   endpoint:
     flowable:
-#      cache:
-#        time-to-live: 0ms # 缓存响应的最大时间。'
+      #      cache:
+      #        time-to-live: 0ms # 缓存响应的最大时间。'
       enabled: true # 是否启用flowable端点。'
