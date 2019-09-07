@@ -29,17 +29,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 			<!-- 排除默认的logback日志，使用log4j-->
-			<!--<exclusions>
-				&lt;!&ndash;TODO 详细druid日志可取消该注释&ndash;&gt;
-				<exclusion>
+			<exclusions>
+				<!--TODO 详细druid日志可取消该注释-->
+				<!--<exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-logging</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-			</exclusions>-->
+                </exclusion>-->
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

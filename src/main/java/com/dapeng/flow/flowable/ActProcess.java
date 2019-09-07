@@ -6,6 +6,7 @@ import org.flowable.engine.repository.*;
 import org.springframework.lang.Nullable;
 
 import java.io.InputStream;
+import java.util.zip.ZipInputStream;
 
 /**
  * 流程定义封装
@@ -62,6 +63,19 @@ public interface ActProcess {
      * @return
      */
     Deployment deploy(String url, String pngUrl);
+
+    /**
+     * 部署压缩包内的流程资源—
+     * 资源包括：bpmn、png、drl、form等等
+     * 流程引擎：内部使用迭代器方式遍历压缩包中文件并读取成响应的文件流
+     *
+     * @param zipInputStream
+     * @param name           流程模板文件名字
+     * @param tenantId       业务系统标识
+     * @param category       流程模板文件类别
+     * @return
+     */
+    Deployment deploy(String name, String tenantId, String category, ZipInputStream zipInputStream);
 
     /**
      * 部署流程定义

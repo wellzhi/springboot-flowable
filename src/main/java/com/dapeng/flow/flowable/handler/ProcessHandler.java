@@ -8,8 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+
 import java.io.InputStream;
 import java.util.List;
+import java.util.zip.ZipInputStream;
 
 /**
  * 流程定义
@@ -53,6 +55,12 @@ public class ProcessHandler extends ServiceFactory implements ActProcess {
 
         Deployment deploy = createDeployment().addClasspathResource(url).addClasspathResource(pngUrl).deploy();
         return deploy;
+    }
+
+    @Override
+    public Deployment deploy(String name, String tenantId, String category, ZipInputStream zipInputStream) {
+        return createDeployment().addZipInputStream(zipInputStream)
+                .name(name).category(category).tenantId(tenantId).deploy();
     }
 
     @Override
@@ -111,8 +119,8 @@ public class ProcessHandler extends ServiceFactory implements ActProcess {
     }
 
     @Override
-    public void addCandidateStarterUser(String processDefinitionKey,String userId) {
-        repositoryService.addCandidateStarterUser(processDefinitionKey,userId);
+    public void addCandidateStarterUser(String processDefinitionKey, String userId) {
+        repositoryService.addCandidateStarterUser(processDefinitionKey, userId);
     }
 
 }
