@@ -1,5 +1,7 @@
 # springboot-flowable
 采用springboot2.0.5+flowable6.4.0搭建工作流微服务项目，对flowable做了简单封装，使用起来更加方便，并对外提供了restful风格的接口。
+# 博客地址
+https://blog.csdn.net/qq_34268861/article/details/100555262
 
 
 [流程追踪高亮图详细实现__activiti版本和flowable版本（支持驳回等）](https://blog.csdn.net/qq_34268861/article/details/100555262)
