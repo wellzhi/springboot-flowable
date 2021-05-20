@@ -16,7 +16,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<mysql.java.version>5.1.39</mysql.java.version>
+		<mysql.java.version>8.0.16</mysql.java.version>
 		<flowable.version>6.4.0</flowable.version>
 		<swagger.version>2.8.0</swagger.version>
 		<lombok.version>1.18.8</lombok.version>
