@@ -3,7 +3,7 @@
 
 ## Star History
 
-![Star History Chart](https://api.star-history.com/svg?repos=wellzhi/springboot-flowable,wellzhi/springboot-activiti&type=Date)
+![Star History Chart](https://api.star-history.com/svg?repos=wellzhi/springboot-flowable&type=Date)
 
 
 如果对你有帮助，请支持一下作者
