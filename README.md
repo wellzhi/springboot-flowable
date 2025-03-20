@@ -24,4 +24,6 @@ https://blog.csdn.net/qq_34268861/article/details/100555262
 
 ## Star History
 
-![Star History Chart](https://api.star-history.com/svg?repos=wellzhi/springboot-flowable&type=Date)
+
+
+![Star History](https://www.star-history.com/#wellzhi/springboot-flowable&Date)
